@@ -1,7 +1,8 @@
+object=[];
 status="";
 
 function preload(){
-    img=loadImage("dog_cat.jpg");
+    img=loadImage("istockphoto-489272417-612x612.jpg");
 }
 function setup(){
     canvas=createCanvas(640,420);
@@ -20,21 +21,22 @@ function gotResults(error,results){
     }
     else{
         console.log(results);
+        object=results;
     }
 }
 function draw(){
     image(img,0,0,640,420);
-    fill("#c8651e");
-    textSize(20);
-    text("Dog",240,50);
-    noFill();
-    stroke("#c8651e");
-    rect(120,70,250,350);
 
-    fill("#c8651e");
-    textSize(20);
-    text("Cat",400,80);
-    noFill();
-    stroke("#c8651e");
-    rect(300,90,300,300);
+    if(status !=""){
+        for(i=0 ; i < object.length ; i++){
+            document.getElementById("status").innerHTML="Status = Objects Detected";
+            percent=floor(object[i].confidence*100);
+            fill("#c8651e");
+            textSize(20);
+            text(object[i].label+" "+percent+"%",object[i].x,object[i].y);
+            noFill();
+            stroke("#c8651e");
+            rect(object[i].x , object[i].y , object[i].height , object[i].width);
+        }
+    }
 }
