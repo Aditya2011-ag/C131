@@ -5,15 +5,17 @@ function preload(){
     img=loadImage("istockphoto-489272417-612x612.jpg");
 }
 function setup(){
-    canvas=createCanvas(640,420);
+    canvas=createCanvas(380,380);
     canvas.center();
+    video=createCapture(VIDEO);
+    video.hide();
     objectDetector=ml5.objectDetector('cocossd',modelLoaded);
     document.getElementById("status").innerHTML="Status = Detecting Objects";
 }
 function modelLoaded(){
     console.log("ModelLoaded");
     status=true;
-    objectDetector.detect(img,gotResults);
+    objectDetector.detect(video,gotResults);
 }
 function gotResults(error,results){
     if(error){
@@ -25,17 +27,22 @@ function gotResults(error,results){
     }
 }
 function draw(){
-    image(img,0,0,640,420);
+    image(video,0,0,380,380);
+    r=random(255);
+    b=random(255);
+    g=random(255);
 
     if(status !=""){
+        objectDetector.detect(video,gotResults);
         for(i=0 ; i < object.length ; i++){
             document.getElementById("status").innerHTML="Status = Objects Detected";
+            document.getElementById("Number_of_objects").innerHTML="Number of objects detected are : "+object.length;
             percent=floor(object[i].confidence*100);
-            fill("#c8651e");
+            fill(r,g,b);
             textSize(20);
             text(object[i].label+" "+percent+"%",object[i].x,object[i].y);
             noFill();
-            stroke("#c8651e");
+            stroke(r,g,b);
             rect(object[i].x , object[i].y , object[i].height , object[i].width);
         }
     }
